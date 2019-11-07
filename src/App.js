@@ -1,26 +1,34 @@
 import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import TodoList from './container/listContainer'
+import AddTodos from './container/todoAddContainer'
+import TodoFilter from './container/todoFilterContainer'
+import { Route } from 'react-router-dom'
+import Portal from './components/Portal'
+import FunctionChild from './components/functionaschild'
 
-function App() {
+import store from './store'
+import {filterTodos} from './action'
+
+function App(props) {
+  // 一定要在组件外部引入app组件的地方使用 <Route path> 不然获取不到数据
+  // 一进来就直接路由设置筛选参数
+  store.dispatch(filterTodos(props.match.params.filter))
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+    <div>
+      <AddTodos></AddTodos>
+      <Route path="/:filter?" component={TodoList}></Route>
+      <Route path="/:filter?" component={TodoFilter}></Route>
+      <Portal></Portal>
+      <FunctionChild>
+        {
+          () => {
+            console.log(123)
+          }
+        }
+      </FunctionChild>
+
+
     </div>
   );
 }
-
-export default App;
+export default App
